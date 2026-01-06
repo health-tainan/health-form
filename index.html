@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深耕計畫收案表 - 資料填寫系統</title>
+    <style>
+        :root {
+            --primary-color: #2c7be5;
+            --bg-color: #f4f7f9;
+            --card-bg: #ffffff;
+            --border-color: #e3e6f0;
+            --warning-color: #e63757;
+        }
+        body {
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+        .section-title {
+            background-color: #edf2f9;
+            padding: 10px 15px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--primary-color);
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+        input[readonly] {
+            background-color: #e9ecef;
+            color: #495057;
+            cursor: not-allowed;
+            font-weight: bold;
+        }
+        /* Checkbox Group Styles */
+        .checkbox-group {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 10px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+        }
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            cursor: pointer;
+        }
+        .checkbox-item.full-width {
+            grid-column: 1 / -1;
+        }
+        .checkbox-item input[type="text"] {
+            padding: 4px 8px;
+            font-size: 0.9em;
+            border-bottom: 1px solid #ccc;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            border-radius: 0;
+            width: 70%;
+        }
+
+        /* 自動計算欄位若有異常顯示紅色 */
+        .status-abnormal {
+            color: var(--warning-color);
+            border-color: var(--warning-color);
+        }
+        .btn-container {
+            margin-top: 30px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn-save {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-save:hover { background-color: #218838; }
+        .btn-clear {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-clear:hover { background-color: #5a6268; }
+        
+        select#clinicName {
+            border: 2px solid var(--primary-color);
+            font-weight: bold;
+            background-color: #f8fbff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>深耕計畫收案表 - 資料填寫</h1>
+    <form id="intakeForm">
+        
+        <div class="section-title">基本資料</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label style="color: var(--primary-color);">診所名稱 (請選擇)</label>
+                <select id="clinicName" name="診所名稱" required>
+                    <option value="">-- 請選擇診所 --</option>
+                    <option value="德幼小兒科診所">德幼小兒科診所</option>
+                    <option value="安康耳鼻喉科診所">安康耳鼻喉科診所</option>
+                    <option value="現代眼科診所">現代眼科診所</option>
+                    <option value="曾泌尿科診所">曾泌尿科診所</option>
+                    <option value="文元診所">文元診所</option>
+                    <option value="仁欣診所">仁欣診所</option>
+                    <option value="李俊杰診所">李俊杰診所</option>
+                    <option value="永德康內科診所">永德康內科診所</option>
+                    <option value="中正耳鼻喉科">中正耳鼻喉科</option>
+                    <option value="三愛診所">三愛診所</option>
+                    <option value="史地分小兒科">史地分小兒科</option>
+                    <option value="享健達診所">享健達診所</option>
+                    <option value="魏大倫耳鼻喉科診所">魏大倫耳鼻喉科診所</option>
+                    <option value="復華耳鼻喉科診所">復華耳鼻喉科診所</option>
+                    <option value="奇康診所">奇康診所</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>個案姓名</label>
+                <input type="text" id="patientName" name="個案姓名" required>
+            </div>
+            
+            <div class="form-group">
+                <label>編號 <span style="font-weight:normal; color:#666; font-size:0.85em;">(診所不需填寫)</span></label>
+                <input type="text" name="編號" placeholder="保留空白">
+            </div>
+
+            <div class="form-group">
+                <label>出生日期</label>
+                <input type="date" id="dob" name="出生日期" required onchange="calcAge()">
+            </div>
+            <div class="form-group">
+                <label style="color: red;">性別 (必選)</label>
+                <select id="gender" name="性別" required onchange="calcSarcopenia()">
+                    <option value="">請選擇</option>
+                    <option value="男">男</option>
+                    <option value="女">女</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>年齡 (自動)</label>
+                <input type="number" id="age" name="年齡" readonly>
+            </div>
+            <div class="form-group">
+                <label>連絡電話</label>
+                <input type="tel" id="phone" name="連絡電話">
+            </div>
+        </div>
+
+        <div class="section-title">血壓與生化數值</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>收縮壓 (mm/Hg)</label>
+                <input type="number" id="systolic" name="收縮壓" oninput="calcBPStage()">
+            </div>
+            <div class="form-group">
+                <label>舒張壓 (mm/Hg)</label>
+                <input type="number" id="diastolic" name="舒張壓" oninput="calcBPStage()">
+            </div>
+            <div class="form-group">
+                <label>血壓分期 (自動)</label>
+                <input type="text" id="bpStage" name="血壓分期" readonly>
+            </div>
+            <div class="form-group">
+                <label>空腹血糖 (mg/dl)</label>
+                <input type="number" name="空腹血糖">
+            </div>
+            <div class="form-group">
+                <label>HbA1c (%)</label>
+                <input type="number" step="0.1" name="HbA1c">
+            </div>
+            <div class="form-group">
+                <label>總膽固醇 (mg/dl)</label>
+                <input type="number" name="總膽固醇">
+            </div>
+            <div class="form-group">
+                <label>三酸甘油酯 (mg/dl)</label>
+                <input type="number" name="三酸甘油酯">
+            </div>
+            <div class="form-group">
+                <label>LDL (mg/dl)</label>
+                <input type="number" name="LDL">
+            </div>
+        </div>
+
+        <div class="section-title">疾病狀況</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>其他疾病</label>
+                <input type="text" name="其他疾病" placeholder="例如：無">
+            </div>
+            <div class="form-group">
+                <label>治療經6個月未達標準</label>
+                <select name="治療經6個月未達標準">
+                    <option value="符合">符合</option>
+                    <option value="不符合">不符合</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>CKD 分期</label>
+                <select name="CKD分期">
+                    <option value="">請選擇</option>
+                    <option value="1級">1級</option>
+                    <option value="2級">2級</option>
+                    <option value="3級">3級</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>CKM 分期</label>
+                <select name="CKM分期">
+                    <option value="">請選擇</option>
+                    <option value="1級">1級</option>
+                    <option value="2級">2級</option>
+                    <option value="3級">3級</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section-title">身體組成與肌少症評估</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>身高 (cm)</label>
+                <input type="number" id="height" name="身高" oninput="calcBMI(); calcASMIndex();">
+            </div>
+            <div class="form-group">
+                <label>體重 (kg)</label>
+                <input type="number" id="weight" name="體重" oninput="calcBMI()">
+            </div>
+            
+            <div class="form-group">
+                <label>腰圍 (cm)</label>
+                <input type="number" name="腰圍" step="0.1">
+            </div>
+            
+            <div class="form-group">
+                <label>BMI (自動)</label>
+                <input type="number" id="bmi" name="BMI" step="0.1" readonly>
+            </div>
+            <div class="form-group">
+                <label>骨骼肌肉量 ASM (kg)</label>
+                <input type="number" id="asm" name="骨骼肌肉量ASM" step="0.1" oninput="calcASMIndex()">
+            </div>
+            <div class="form-group">
+                <label>ASM 指標 (kg/m²)</label>
+                <input type="number" id="asmIndex" name="ASM指標" step="0.01" readonly>
+            </div>
+            <div class="form-group">
+                <label>手握力 (kg)</label>
+                <input type="number" id="grip" name="手握力" step="0.1" oninput="calcSarcopenia()">
+            </div>
+            <div class="form-group">
+                <label>握力判定 (自動)</label>
+                <input type="text" id="gripStatus" name="握力判定" readonly>
+            </div>
+            <div class="form-group">
+                <label>肌肉量判定 (自動)</label>
+                <input type="text" id="muscleStatus" name="肌肉量判定" readonly>
+            </div>
+            <div class="form-group">
+                <label>肌少症總結 (自動)</label>
+                <input type="text" id="sarcopeniaSummary" name="肌少症總結" readonly>
+            </div>
+        </div>
+
+        <div class="section-title">日期與其他</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>CGM 安裝日</label>
+                <input type="date" name="CGM安裝日">
+            </div>
+            <div class="form-group">
+                <label>智慧手環發放日</label>
+                <input type="date" name="智慧手環發放日">
+            </div>
+            
+            <div class="form-group">
+                <label>需求評估項目 (可複選)</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item"><input type="checkbox" value="運動" onchange="updateNeeds()"> 運動</div>
+                    <div class="checkbox-item"><input type="checkbox" value="營養" onchange="updateNeeds()"> 營養</div>
+                    <div class="checkbox-item"><input type="checkbox" value="睡眠" onchange="updateNeeds()"> 睡眠</div>
+                    <div class="checkbox-item"><input type="checkbox" value="壓力管理" onchange="updateNeeds()"> 壓力管理</div>
+                    <div class="checkbox-item"><input type="checkbox" value="危害物質(菸酒)" onchange="updateNeeds()"> 危害物質(菸酒)</div>
+                    <div class="checkbox-item"><input type="checkbox" value="社會資源" onchange="updateNeeds()"> 社會資源</div>
+                    
+                    <div class="checkbox-item full-width">
+                        <input type="checkbox" id="otherNeedCheck" onchange="updateNeeds()"> 
+                        其他: <input type="text" id="otherNeedText" placeholder="請輸入" oninput="updateNeeds()">
+                    </div>
+                </div>
+                <input type="hidden" id="needsInput" name="需求評估項目">
+            </div>
+
+            <div class="form-group">
+                <label>備註</label>
+                <input type="text" name="備註">
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <button type="button" class="btn-clear" onclick="clearForm()">清空表格</button>
+            <button type="button" class="btn-save" onclick="saveData()">匯出 CSV (存檔)</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // 0. 更新需求評估項目 (將勾選內容合併為字串)
+    function updateNeeds() {
+        const checkedValues = [];
+        
+        // 檢查預設選項
+        const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+            // 排除 "其他" 的 checkbox (因為它的 value 預設不是我們想要的文字)
+            if (cb.checked && cb.id !== "otherNeedCheck") { 
+                checkedValues.push(cb.value);
+            }
+        });
+
+        // 檢查 "其他"
+        const otherCheck = document.getElementById('otherNeedCheck');
+        const otherText = document.getElementById('otherNeedText').value.trim();
+        
+        if (otherCheck.checked && otherText) {
+            checkedValues.push(otherText);
+        }
+
+        // 填入隱藏欄位
+        document.getElementById('needsInput').value = checkedValues.join("、");
+    }
+
+    // 1. 計算年齡
+    function calcAge() {
+        const dobStr = document.getElementById('dob').value;
+        if (!dobStr) return;
+        const dob = new Date(dobStr);
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const m = today.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+        document.getElementById('age').value = age;
+    }
+
+    // 2. 計算 BMI
+    function calcBMI() {
+        const h = parseFloat(document.getElementById('height').value);
+        const w = parseFloat(document.getElementById('weight').value);
+        if (h && w) {
+            const bmi = w / ((h/100) * (h/100));
+            document.getElementById('bmi').value = bmi.toFixed(1);
+        }
+    }
+
+    // 3. 計算血壓分期
+    function calcBPStage() {
+        const sys = parseInt(document.getElementById('systolic').value);
+        const dia = parseInt(document.getElementById('diastolic').value);
+        const output = document.getElementById('bpStage');
+        
+        output.classList.remove('status-abnormal'); // 重置樣式
+
+        if (!sys || !dia) {
+            output.value = "";
+            return;
+        }
+
+        if (sys >= 160 || dia >= 100) {
+            output.value = "高血壓第2期";
+            output.classList.add('status-abnormal');
+        } else if (sys >= 140 || dia >= 90) {
+            output.value = "高血壓第1期";
+            output.classList.add('status-abnormal');
+        } else if (sys >= 120 || dia >= 80) {
+            output.value = "高血壓前期";
+        } else {
+            output.value = "正常";
+        }
+    }
+
+    // 4. 計算 ASM 指標並觸發肌少症判定
+    function calcASMIndex() {
+        const h = parseFloat(document.getElementById('height').value);
+        const asm = parseFloat(document.getElementById('asm').value);
+        
+        if (h && asm) {
+            const index = asm / ((h/100) * (h/100));
+            document.getElementById('asmIndex').value = index.toFixed(2);
+        } else {
+            document.getElementById('asmIndex').value = "";
+        }
+        
+        // ASM改變一定要重新判定肌少症
+        calcSarcopenia(); 
+    }
+
+    // 5. 肌少症判定邏輯 (修正版)
+    function calcSarcopenia() {
+        const gender = document.getElementById('gender').value;
+        const grip = parseFloat(document.getElementById('grip').value);
+        const asmIndex = parseFloat(document.getElementById('asmIndex').value);
+        
+        const gripStatusEl = document.getElementById('gripStatus');
+        const muscleStatusEl = document.getElementById('muscleStatus');
+        const summaryEl = document.getElementById('sarcopeniaSummary');
+
+        // 重置樣式與內容
+        gripStatusEl.classList.remove('status-abnormal');
+        muscleStatusEl.classList.remove('status-abnormal');
+        summaryEl.classList.remove('status-abnormal');
+
+        // 如果未選擇性別，不進行計算，並提示
+        if (!gender) {
+            if (!isNaN(grip)) gripStatusEl.value = "請先選擇性別";
+            if (!isNaN(asmIndex)) muscleStatusEl.value = "請先選擇性別";
+            summaryEl.value = "";
+            return;
+        }
+
+        // 定義閾值 (AWGS 2019)
+        let gripCutoff = (gender === '男') ? 28 : 18;
+        let asmCutoff = (gender === '男') ? 7.0 : 5.4;
+
+        let isGripLow = false;
+        let isMuscleLow = false;
+
+        // 判定握力
+        if (!isNaN(grip)) {
+            if (grip < gripCutoff) {
+                gripStatusEl.value = "異常";
+                gripStatusEl.classList.add('status-abnormal');
+                isGripLow = true;
+            } else {
+                gripStatusEl.value = "正常";
+            }
+        } else {
+            gripStatusEl.value = "";
+        }
+
+        // 判定肌肉量 (ASM Index)
+        if (!isNaN(asmIndex)) {
+            if (asmIndex < asmCutoff) {
+                muscleStatusEl.value = "異常";
+                muscleStatusEl.classList.add('status-abnormal');
+                isMuscleLow = true;
+            } else {
+                muscleStatusEl.value = "正常";
+            }
+        } else {
+            muscleStatusEl.value = "";
+        }
+
+        // 總結：只要其中一項有數值，就嘗試給出總結
+        if (gripStatusEl.value && gripStatusEl.value !== "請先選擇性別" && 
+            muscleStatusEl.value && muscleStatusEl.value !== "請先選擇性別") {
+            
+            if (isGripLow && isMuscleLow) {
+                summaryEl.value = "肌少症確診";
+                summaryEl.classList.add('status-abnormal');
+            } else if (isGripLow || isMuscleLow) {
+                summaryEl.value = "肌少症可能 (單項異常)";
+                summaryEl.classList.add('status-abnormal');
+            } else {
+                summaryEl.value = "正常";
+            }
+        } else {
+            summaryEl.value = "";
+        }
+    }
+
+    // 6. 清空表單
+    function clearForm() {
+        if(confirm("確定要清空所有欄位嗎？")) {
+            document.getElementById('intakeForm').reset();
+            // 重置所有樣式
+            document.querySelectorAll('.status-abnormal').forEach(el => el.classList.remove('status-abnormal'));
+            // 重置需求評估隱藏欄位
+            document.getElementById('needsInput').value = "";
+        }
+    }
+
+    // 7. 匯出 CSV
+    function saveData() {
+        const form = document.getElementById('intakeForm');
+        
+        // 檢查診所與姓名是否填寫
+        const clinic = document.getElementById('clinicName').value;
+        const patient = document.getElementById('patientName').value;
+        if(!clinic || !patient) {
+            alert("請務必選擇「診所名稱」並填寫「個案姓名」才能存檔！");
+            return;
+        }
+
+        const formData = new FormData(form);
+        const headers = [];
+        const values = [];
+
+        for (const [key, value] of formData.entries()) {
+            headers.push(key);
+            values.push(`"${value}"`);
+        }
+
+        const autoFields = ['age', 'bpStage', 'bmi', 'asmIndex', 'gripStatus', 'muscleStatus', 'sarcopeniaSummary'];
+        const autoHeaders = ['年齡(自動)', '血壓分期(自動)', 'BMI(自動)', 'ASM指標(自動)', '握力判定(自動)', '肌肉量判定(自動)', '肌少症總結(自動)'];
+        
+        autoFields.forEach((id, index) => {
+            headers.push(autoHeaders[index]);
+            values.push(`"${document.getElementById(id).value}"`);
+        });
+
+        const csvContent = "\uFEFF" + headers.join(",") + "\n" + values.join(",");
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        
+        const today = new Date().toISOString().slice(0, 10);
+        link.setAttribute("href", url);
+        // 檔名：收案表_診所名_姓名_日期.csv
+        link.setAttribute("download", `收案表_${clinic}_${patient}_${today}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+</html>
